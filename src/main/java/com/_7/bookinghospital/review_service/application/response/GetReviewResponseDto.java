@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReviewResponseDto {
+public class GetReviewResponseDto {
 
 	private Long userId;
 	private UUID reservationId;

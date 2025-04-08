@@ -1,4 +1,4 @@
-package com._7.bookinghospital.review_service.application.response;
+package com._7.bookinghospital.review_service.presentation.request;
 
 import java.util.UUID;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReviewResponseDto {
+public class ReviewRequestDto {
 
 	private Long userId;
 	private UUID reservationId;
