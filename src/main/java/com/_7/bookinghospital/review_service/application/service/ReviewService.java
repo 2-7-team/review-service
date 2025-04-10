@@ -44,4 +44,9 @@ public class ReviewService {
 
 		return ReviewResponseDto.from(review);
 	}
+
+	@Transactional
+	public void deleteReview(UUID reviewId) {
+		reviewRepository.deleteById(reviewId);
+	}
 }

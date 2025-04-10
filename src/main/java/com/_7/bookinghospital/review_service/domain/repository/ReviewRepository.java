@@ -8,4 +8,6 @@ public interface ReviewRepository {
 	void save(Review review);
 
 	Review findById(UUID reviewId);
+
+	void deleteById(UUID reviewId);
 }

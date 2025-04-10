@@ -28,4 +28,9 @@ public class ReviewJpaRepositoryImpl implements ReviewRepository {
 			.orElseThrow(() -> new IllegalArgumentException("해당 ID의 리뷰가 존재하지 않습니다."));
 	}
 
+	@Override
+	public void deleteById(UUID reviewId) {
+		reviewJpaRepository.deleteById(reviewId);
+	}
+
 }
