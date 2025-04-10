@@ -3,6 +3,7 @@ package com._7.bookinghospital.review_service.presentation.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,16 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com._7.bookinghospital.review_service.application.response.GetReviewResponseDto;
 import com._7.bookinghospital.review_service.application.response.ReviewResponseDto;
+import com._7.bookinghospital.review_service.application.service.ReviewService;
 import com._7.bookinghospital.review_service.presentation.request.ReviewRequestDto;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/review")
+@RequiredArgsConstructor
 public class ReviewController {
+
+	private final ReviewService reviewService;
 
 	@PostMapping()
 	public ResponseEntity<ReviewResponseDto> createReview(@RequestBody ReviewRequestDto request) {
+		ReviewResponseDto response = reviewService.createReview(request);
 
-		return null;
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@GetMapping("/{hospitalId}")

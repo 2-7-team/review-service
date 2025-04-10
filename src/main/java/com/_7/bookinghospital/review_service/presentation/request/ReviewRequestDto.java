@@ -15,6 +15,7 @@ public class ReviewRequestDto {
 
 	private Long userId;
 	private UUID reservationId;
+	private UUID hospitalId;
 	private String title;
 	private String content;
 	private Integer rating;
