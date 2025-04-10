@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReviewResponseDto {
 
+	private UUID id;
 	private Long userId;
 	private UUID reservationId;
 	private UUID hospitalId;
@@ -24,6 +25,7 @@ public class ReviewResponseDto {
 
 	public static ReviewResponseDto from(Review review) {
 		return ReviewResponseDto.builder()
+			.id(review.getId())
 			.userId(review.getUserId())
 			.reservationId(review.getReservationId())
 			.hospitalId(review.getHospitalId())

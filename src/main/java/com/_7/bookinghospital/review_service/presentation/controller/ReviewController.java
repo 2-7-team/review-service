@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com._7.bookinghospital.review_service.application.response.GetReviewResponseDto;
 import com._7.bookinghospital.review_service.application.response.ReviewResponseDto;
 import com._7.bookinghospital.review_service.application.service.ReviewService;
 import com._7.bookinghospital.review_service.presentation.request.ReviewRequestDto;
@@ -36,15 +35,16 @@ public class ReviewController {
 	}
 
 	@GetMapping("/{hospitalId}")
-	public List<ResponseEntity<GetReviewResponseDto>> getHospitalReviews(@PathVariable UUID hospitalId) {
+	public List<ResponseEntity<ReviewResponseDto>> getHospitalReviews(@PathVariable UUID hospitalId) {
 
 		return null;
 	}
 
 	@GetMapping("/{hospitalId}/{reviewId}")
-	public ResponseEntity<GetReviewResponseDto> getReview(@PathVariable UUID hospitalId, @PathVariable UUID reviewId) {
+	public ResponseEntity<ReviewResponseDto> getReview(@PathVariable UUID hospitalId, @PathVariable UUID reviewId) {
+		ReviewResponseDto response = reviewService.getReview(hospitalId, reviewId);
 
-		return null;
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 	@PutMapping("/{reviewId}")
