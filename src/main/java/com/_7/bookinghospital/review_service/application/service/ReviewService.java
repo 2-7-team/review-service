@@ -9,6 +9,7 @@ import com._7.bookinghospital.review_service.application.response.ReviewResponse
 import com._7.bookinghospital.review_service.domain.model.Review;
 import com._7.bookinghospital.review_service.domain.repository.ReviewRepository;
 import com._7.bookinghospital.review_service.presentation.request.ReviewRequestDto;
+import com._7.bookinghospital.review_service.presentation.request.ReviewUpdateRequestDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,15 @@ public class ReviewService {
 		// todo. hospitalID가 실제 hospital 서비스에 존재하는지 확인하는 로직 구현
 
 		Review review = reviewRepository.findById(reviewId);
+
+		return ReviewResponseDto.from(review);
+	}
+
+	@Transactional
+	public ReviewResponseDto updateReview(UUID reviewId, ReviewUpdateRequestDto request) {
+		Review review = reviewRepository.findById(reviewId);
+
+		review.update(request);
 
 		return ReviewResponseDto.from(review);
 	}

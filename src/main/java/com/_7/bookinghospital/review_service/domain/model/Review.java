@@ -3,6 +3,7 @@ package com._7.bookinghospital.review_service.domain.model;
 import java.util.UUID;
 
 import com._7.bookinghospital.review_service.presentation.request.ReviewRequestDto;
+import com._7.bookinghospital.review_service.presentation.request.ReviewUpdateRequestDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -62,5 +63,11 @@ public class Review {
 			.content(request.getContent())
 			.rating(request.getRating())
 			.build();
+	}
+
+	public void update(ReviewUpdateRequestDto request) {
+		this.title = request.getTitle();
+		this.content = request.getContent();
+		this.rating = request.getRating();
 	}
 }

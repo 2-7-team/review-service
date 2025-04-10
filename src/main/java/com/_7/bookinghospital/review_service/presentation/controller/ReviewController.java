@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com._7.bookinghospital.review_service.application.response.ReviewResponseDto;
 import com._7.bookinghospital.review_service.application.service.ReviewService;
 import com._7.bookinghospital.review_service.presentation.request.ReviewRequestDto;
+import com._7.bookinghospital.review_service.presentation.request.ReviewUpdateRequestDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,10 +49,11 @@ public class ReviewController {
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
-	@PutMapping("/{reviewId}")
-	public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable UUID reviewId, @RequestBody ReviewRequestDto request) {
+	@PatchMapping("/{reviewId}")
+	public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable UUID reviewId, @RequestBody ReviewUpdateRequestDto request) {
+		ReviewResponseDto response = reviewService.updateReview(reviewId, request);
 
-		return null;
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 	@DeleteMapping("/{reviewId}")
