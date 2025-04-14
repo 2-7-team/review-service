@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com._7.bookinghospital.review_service.presentation.request.SearchRequestDto;
 import com._7.bookinghospital.review_service.application.response.ReviewResponseDto;
 import com._7.bookinghospital.review_service.application.service.ReviewService;
 import com._7.bookinghospital.review_service.presentation.request.ReviewRequestDto;
@@ -36,9 +38,11 @@ public class ReviewController {
 	}
 
 	@GetMapping("/{hospitalId}")
-	public List<ResponseEntity<ReviewResponseDto>> getHospitalReviews(@PathVariable UUID hospitalId) {
+	public ResponseEntity<List<ReviewResponseDto>> getHospitalReviews(@PathVariable UUID hospitalId,
+		@ModelAttribute SearchRequestDto request) {
+		List<ReviewResponseDto> reviews = reviewService.getHospitalReviews(hospitalId, request);
 
-		return null;
+		return ResponseEntity.status(HttpStatus.OK).body(reviews);
 	}
 
 	@GetMapping("/{hospitalId}/{reviewId}")
