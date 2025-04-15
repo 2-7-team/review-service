@@ -24,7 +24,7 @@ import com._7.bookinghospital.review_service.presentation.request.ReviewUpdateRe
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/review")
+@RequestMapping("/api/reviews")
 @RequiredArgsConstructor
 public class ReviewController {
 

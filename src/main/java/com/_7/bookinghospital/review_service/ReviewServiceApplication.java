@@ -2,7 +2,9 @@ package com._7.bookinghospital.review_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
+@EnableFeignClients(basePackages = "com._7.bookinghospital.review_service.infrastructure.client")
 @SpringBootApplication
 public class ReviewServiceApplication {
 
