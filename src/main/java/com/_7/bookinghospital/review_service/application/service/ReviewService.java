@@ -85,4 +85,14 @@ public class ReviewService {
 	public void deleteReview(UUID reviewId) {
 		reviewRepository.deleteById(reviewId);
 	}
+
+	public Long countHospitalReviews(UUID hospitalId) {
+		try {
+			return reviewRepository.countByHospitalId(hospitalId);
+
+		} catch (FeignException.NotFound e) {
+			// todo. 커스텀 예외로 수정 예정
+			throw new IllegalArgumentException("해당 병원은 존재하지 않습니다.");
+		}
+	}
 }

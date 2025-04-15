@@ -30,7 +30,6 @@ public class ReviewJpaRepositoryImpl implements ReviewRepository {
 
 	@Override
 	public Review findById(UUID reviewId) {
-
 		return reviewJpaRepository.findById(reviewId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 ID의 리뷰가 존재하지 않습니다."));
 	}
@@ -38,5 +37,10 @@ public class ReviewJpaRepositoryImpl implements ReviewRepository {
 	@Override
 	public void deleteById(UUID reviewId) {
 		reviewJpaRepository.deleteById(reviewId);
+	}
+
+	@Override
+	public Long countByHospitalId(UUID hospitalId) {
+		return reviewJpaRepository.countByHospitalId(hospitalId);
 	}
 }

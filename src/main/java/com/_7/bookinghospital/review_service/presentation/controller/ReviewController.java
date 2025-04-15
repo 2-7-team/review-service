@@ -65,4 +65,11 @@ public class ReviewController {
 
 		return ResponseEntity.ok("정상적으로 삭제 되었습니다.");
 	}
+
+	@GetMapping("/{hospitalId}/count")
+	public ResponseEntity<Long> countHospitalReviews(@PathVariable UUID hospitalId) {
+		Long reviewCount = reviewService.countHospitalReviews(hospitalId);
+
+		return ResponseEntity.status(HttpStatus.OK).body(reviewCount);
+	}
 }

@@ -15,4 +15,6 @@ public interface ReviewRepository {
 	void deleteById(UUID reviewId);
 
 	Page<Review> searchByHospitalIdAndKeyword(UUID hospitalId, String keyword, PageRequest pageRequest);
+
+	Long countByHospitalId(UUID hospitalId);
 }

@@ -15,4 +15,6 @@ public interface SpringDataReviewJpaRepository extends JpaRepository<Review, UUI
 		"(LOWER(r.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
 		" LOWER(r.content) LIKE LOWER(CONCAT('%', :keyword, '%')))")
 	Page<Review> searchByHospitalIdAndKeyword(UUID hospitalId, String keyword, Pageable pageable);
+
+	Long countByHospitalId(UUID hospitalId);
 }
