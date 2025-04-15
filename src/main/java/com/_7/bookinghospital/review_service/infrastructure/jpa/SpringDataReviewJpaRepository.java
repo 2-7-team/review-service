@@ -17,4 +17,7 @@ public interface SpringDataReviewJpaRepository extends JpaRepository<Review, UUI
 	Page<Review> searchByHospitalIdAndKeyword(UUID hospitalId, String keyword, Pageable pageable);
 
 	Long countByHospitalId(UUID hospitalId);
+
+	@Query("SELECT AVG(r.rating) FROM Review r WHERE r.hospitalId = :hospitalId")
+	Float findAvgRatingByHospitalId(UUID hospitalId);
 }

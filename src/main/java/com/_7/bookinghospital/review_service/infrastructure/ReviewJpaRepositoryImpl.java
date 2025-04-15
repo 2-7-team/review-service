@@ -43,4 +43,9 @@ public class ReviewJpaRepositoryImpl implements ReviewRepository {
 	public Long countByHospitalId(UUID hospitalId) {
 		return reviewJpaRepository.countByHospitalId(hospitalId);
 	}
+
+	@Override
+	public Float findAvgRatingByHospitalId(UUID hospitalId) {
+		return reviewJpaRepository.findAvgRatingByHospitalId(hospitalId);
+	}
 }

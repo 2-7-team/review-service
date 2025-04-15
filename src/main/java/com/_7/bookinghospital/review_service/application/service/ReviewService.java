@@ -95,4 +95,16 @@ public class ReviewService {
 			throw new IllegalArgumentException("해당 병원은 존재하지 않습니다.");
 		}
 	}
+
+	public Float getRating(UUID hospitalId) {
+		try {
+			Float avgRating = reviewRepository.findAvgRatingByHospitalId(hospitalId);
+
+			return avgRating == null ? 0.0f : avgRating;
+
+		} catch (FeignException.NotFound e) {
+			// todo. 커스텀 예외로 수정 예정
+			throw new IllegalArgumentException("해당 병원은 존재하지 않습니다.");
+		}
+	}
 }

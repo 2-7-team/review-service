@@ -72,4 +72,11 @@ public class ReviewController {
 
 		return ResponseEntity.status(HttpStatus.OK).body(reviewCount);
 	}
+
+	@GetMapping("/{hospitalId}/rating")
+	public ResponseEntity<Float> getRating(@PathVariable UUID hospitalId) {
+		Float rating = reviewService.getRating(hospitalId);
+
+		return ResponseEntity.status(HttpStatus.OK).body(rating);
+	}
 }

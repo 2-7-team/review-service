@@ -17,4 +17,6 @@ public interface ReviewRepository {
 	Page<Review> searchByHospitalIdAndKeyword(UUID hospitalId, String keyword, PageRequest pageRequest);
 
 	Long countByHospitalId(UUID hospitalId);
+
+	Float findAvgRatingByHospitalId(UUID hospitalId);
 }
