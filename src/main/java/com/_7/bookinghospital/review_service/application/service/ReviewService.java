@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ReviewService {
+	// todo try-catch문 반복되는 부분 유틸화 고려 필요.
 
 	private final ReviewRepository reviewRepository;
 	private final HospitalClient hospitalClient;
