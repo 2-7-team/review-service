@@ -2,6 +2,9 @@ package com._7.bookinghospital.review_service.domain.model;
 
 import java.util.UUID;
 
+import com._7.bookinghospital.review_service.presentation.request.ReviewRequestDto;
+import com._7.bookinghospital.review_service.presentation.request.ReviewUpdateRequestDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +21,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_review")
 public class Review {
+
+	@Builder
+	public Review(Long userId, UUID reservationId, UUID hospitalId, String title, String content, Integer rating) {
+		this.userId = userId;
+		this.reservationId = reservationId;
+		this.hospitalId = hospitalId;
+		this.title = title;
+		this.content = content;
+		this.rating = rating;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -29,6 +43,9 @@ public class Review {
 	private UUID reservationId;
 
 	@Column(nullable = false)
+	private UUID hospitalId;
+
+	@Column(nullable = false)
 	private String title;
 
 	@Column(nullable = false)
@@ -36,4 +53,21 @@ public class Review {
 
 	@Column(nullable = false)
 	private Integer rating;
+
+	public static Review create(ReviewRequestDto request) {
+		return Review.builder()
+			.userId(request.getUserId())
+			.reservationId(request.getReservationId())
+			.hospitalId(request.getHospitalId())
+			.title(request.getTitle())
+			.content(request.getContent())
+			.rating(request.getRating())
+			.build();
+	}
+
+	public void update(ReviewUpdateRequestDto request) {
+		this.title = request.getTitle();
+		this.content = request.getContent();
+		this.rating = request.getRating();
+	}
 }

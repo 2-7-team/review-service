@@ -38,3 +38,4 @@ out/
 
 ### ymal ###
 /src/main/resources/application.yml
+/gradle.properties
