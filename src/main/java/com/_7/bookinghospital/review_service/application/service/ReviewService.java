@@ -3,12 +3,12 @@ package com._7.bookinghospital.review_service.application.service;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com._7.bookinghospital.review_service.exception.NotExistHospitalException;
 import com._7.bookinghospital.review_service.infrastructure.client.HospitalClient;
 import com._7.bookinghospital.review_service.infrastructure.dto.HospitalCheckResponse;
 import com._7.bookinghospital.review_service.presentation.request.SearchRequestDto;
@@ -25,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ReviewService {
-	// todo try-catch문 반복되는 부분 유틸화 고려 필요.
 
 	private final ReviewRepository reviewRepository;
 	private final HospitalClient hospitalClient;
@@ -39,36 +38,22 @@ public class ReviewService {
 	}
 
 	public List<ReviewResponseDto> getHospitalReviews(UUID hospitalId, SearchRequestDto request) {
-		try {
-			HospitalCheckResponse checkedHospitalId = hospitalClient.getHospitalId(hospitalId);
+		validateHospitalExist(hospitalId);
+		PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
+		Page<Review> reviews = reviewRepository.searchByHospitalIdAndKeyword(
+			hospitalId,
+			request.getKeyword(),
+			pageRequest
+		);
 
-			PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
-			Page<Review> reviews = reviewRepository.searchByHospitalIdAndKeyword(
-				checkedHospitalId.getHospitalId(),
-				request.getKeyword(),
-				pageRequest
-			);
-			return reviews.stream().map(ReviewResponseDto::from).toList();
-
-		} catch (FeignException.NotFound e) {
-			// todo. 커스텀 예외로 수정 예정
-			throw new IllegalArgumentException("해당 병원은 존재하지 않습니다.");
-		}
-
+		return reviews.stream().map(ReviewResponseDto::from).toList();
 	}
 
 	public ReviewResponseDto getReview(UUID hospitalId, UUID reviewId) {
-		try {
-			hospitalClient.getHospitalId(hospitalId);
+		validateHospitalExist(hospitalId);
+		Review review = reviewRepository.findById(reviewId);
 
-			Review review = reviewRepository.findById(reviewId);
-
-			return ReviewResponseDto.from(review);
-
-		} catch (FeignException.NotFound e) {
-			// todo. 커스텀 예외로 수정 예정
-			throw new IllegalArgumentException("해당 병원은 존재하지 않습니다.");
-		}
+		return ReviewResponseDto.from(review);
 	}
 
 	public ReviewResponseDto getReviewById(UUID reviewId) {
@@ -92,24 +77,25 @@ public class ReviewService {
 	}
 
 	public Long countHospitalReviews(UUID hospitalId) {
-		try {
-			return reviewRepository.countByHospitalId(hospitalId);
+		validateHospitalExist(hospitalId);
 
-		} catch (FeignException.NotFound e) {
-			// todo. 커스텀 예외로 수정 예정
-			throw new IllegalArgumentException("해당 병원은 존재하지 않습니다.");
-		}
+		return reviewRepository.countByHospitalId(hospitalId);
 	}
 
 	public Float getRating(UUID hospitalId) {
+		validateHospitalExist(hospitalId);
+
+		Float avgRating = reviewRepository.findAvgRatingByHospitalId(hospitalId);
+
+		return avgRating == null ? 0.0f : avgRating;
+	}
+
+	// todo utils로 뺄지 아니면 Service에 놓을지 고민 필요
+	private void validateHospitalExist(UUID hospitalId) {
 		try {
-			Float avgRating = reviewRepository.findAvgRatingByHospitalId(hospitalId);
-
-			return avgRating == null ? 0.0f : avgRating;
-
-		} catch (FeignException.NotFound e) {
-			// todo. 커스텀 예외로 수정 예정
-			throw new IllegalArgumentException("해당 병원은 존재하지 않습니다.");
+			hospitalClient.getHospitalId(hospitalId);
+		} catch (FeignException e) {
+			throw new NotExistHospitalException("해당 병원은 존재하지 않습니다.");
 		}
 	}
 }
