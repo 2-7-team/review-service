@@ -5,6 +5,7 @@ import java.util.UUID;
 import com._7.bookinghospital.review_service.presentation.request.ReviewRequestDto;
 import com._7.bookinghospital.review_service.presentation.request.ReviewUpdateRequestDto;
 
+import bookinghospital.common_module.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_review")
-public class Review {
+public class Review extends BaseEntity {
 
 	@Builder
 	public Review(Long userId, UUID reservationId, UUID hospitalId, String title, String content, Integer rating) {
