@@ -54,9 +54,9 @@ public class Review {
 	@Column(nullable = false)
 	private Integer rating;
 
-	public static Review create(ReviewRequestDto request) {
+	public static Review create(ReviewRequestDto request, Long userId) {
 		return Review.builder()
-			.userId(request.getUserId())
+			.userId(userId)
 			.reservationId(request.getReservationId())
 			.hospitalId(request.getHospitalId())
 			.title(request.getTitle())

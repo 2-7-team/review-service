@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReviewRequestDto {
 
-	private Long userId;
 	private UUID reservationId;
 	private UUID hospitalId;
 	private String title;

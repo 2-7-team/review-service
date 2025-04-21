@@ -31,15 +31,14 @@ public class ReviewService {
 	private final HospitalClient hospitalClient;
 
 	@Transactional
-	public ReviewResponseDto createReview(ReviewRequestDto request) {
-		Review review = Review.create(request);
+	public ReviewResponseDto createReview(ReviewRequestDto request, Long userId) {
+		Review review = Review.create(request, userId);
 		reviewRepository.save(review);
 
 		return ReviewResponseDto.from(review);
 	}
 
 	public List<ReviewResponseDto> getHospitalReviews(UUID hospitalId, SearchRequestDto request) {
-		// todo. hospitalID가 실제 hospital 서비스에 존재하는지 확인하는 로직 구현
 		try {
 			HospitalCheckResponse checkedHospitalId = hospitalClient.getHospitalId(hospitalId);
 
@@ -59,7 +58,6 @@ public class ReviewService {
 	}
 
 	public ReviewResponseDto getReview(UUID hospitalId, UUID reviewId) {
-		// todo. hospitalID가 실제 hospital 서비스에 존재하는지 확인하는 로직 구현
 		try {
 			hospitalClient.getHospitalId(hospitalId);
 
@@ -71,6 +69,12 @@ public class ReviewService {
 			// todo. 커스텀 예외로 수정 예정
 			throw new IllegalArgumentException("해당 병원은 존재하지 않습니다.");
 		}
+	}
+
+	public ReviewResponseDto getReviewById(UUID reviewId) {
+		Review review = reviewRepository.findById(reviewId);
+
+		return ReviewResponseDto.from(review);
 	}
 
 	@Transactional
