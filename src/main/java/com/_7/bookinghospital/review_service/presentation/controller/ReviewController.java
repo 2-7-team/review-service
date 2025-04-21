@@ -3,8 +3,6 @@ package com._7.bookinghospital.review_service.presentation.controller;
 import java.util.List;
 import java.util.UUID;
 
-import javax.naming.AuthenticationException;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com._7.bookinghospital.review_service.exception.NotReviewOwnerException;
 import com._7.bookinghospital.review_service.presentation.request.SearchRequestDto;
 import com._7.bookinghospital.review_service.application.response.ReviewResponseDto;
 import com._7.bookinghospital.review_service.application.service.ReviewService;
@@ -50,7 +49,8 @@ public class ReviewController {
 	@GetMapping("/{hospitalId}")
 	public ResponseEntity<List<ReviewResponseDto>> getHospitalReviews(
 		@PathVariable UUID hospitalId,
-		@ModelAttribute SearchRequestDto request) {
+		@ModelAttribute SearchRequestDto request,
+		@UserInfo UserDetails user) {
 		// todo 로그인한 유저만 볼 수 있게 설정?
 		List<ReviewResponseDto> reviews = reviewService.getHospitalReviews(hospitalId, request);
 
@@ -72,12 +72,7 @@ public class ReviewController {
 		@PathVariable UUID reviewId,
 		@RequestBody ReviewUpdateRequestDto request,
 		@UserInfo UserDetails user) {
-
-		ReviewResponseDto review = reviewService.getReviewById(reviewId);
-
-		if (!user.getUserId().equals(review.getUserId())) {
-			throw new IllegalArgumentException("본인의 리뷰만 수정할 수 있습니다.");
-		}
+		validateReviewOwnerOrThrow(reviewId, user, "본인의 리뷰만 수정할 수 있습니다.");
 
 		ReviewResponseDto response = reviewService.updateReview(reviewId, request);
 
@@ -86,11 +81,7 @@ public class ReviewController {
 
 	@DeleteMapping("/{reviewId}")
 	public ResponseEntity<String> deleteReview(@PathVariable UUID reviewId, @UserInfo UserDetails user) {
-		ReviewResponseDto review = reviewService.getReviewById(reviewId);
-
-		if (!user.getUserId().equals(review.getUserId())) {
-			throw new IllegalArgumentException("본인의 리뷰만 수정할 수 있습니다.");
-		}
+		validateReviewOwnerOrThrow(reviewId, user, "본인의 리뷰만 삭제할 수 있습니다.");
 
 		reviewService.deleteReview(reviewId);
 
@@ -109,5 +100,14 @@ public class ReviewController {
 		Float rating = reviewService.getRating(hospitalId);
 
 		return ResponseEntity.status(HttpStatus.OK).body(rating);
+	}
+
+	// todo utils로 뺄지 아니면 Controller에 놓을지 고민 필요
+	private void validateReviewOwnerOrThrow(UUID reviewId, UserDetails user, String message) {
+		ReviewResponseDto review = reviewService.getReviewById(reviewId);
+
+		if (!user.getUserId().equals(review.getUserId())) {
+			throw new NotReviewOwnerException(message);
+		}
 	}
 }
